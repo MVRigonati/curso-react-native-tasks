@@ -7,6 +7,7 @@ import todayImage from '../../assets/imgs/today.jpg'
 import commonStyles from '../commonStyles'
 import moment from 'moment'
 import 'moment/locale/pt-br'
+import Task from '../components/Task'
 
 const styles = StyleSheet.create({
 	container: {
@@ -52,9 +53,10 @@ export default class Agenda extends Component {
 					</View>
 				</ImageBackground>
 				<View style={styles.taskContainer}>
-					<Text>Tarefa 1</Text>
-					<Text>Tarefa 2</Text>
-					<Text>Tarefa 3</Text>
+					<Task desc='Tarefa pendente'
+						estimateAt={new Date()} doneAt={null} />
+					<Task desc='Tarefa pendente'
+						estimateAt={new Date()} doneAt={new Date()} />
 				</View>
 			</View>
 		)

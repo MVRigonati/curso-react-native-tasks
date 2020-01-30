@@ -14,6 +14,6 @@ export default {
 		today: '#B13B44',
 		secondary: '#FFF',
 		mainText: '#222',
-		subTexy: '#555'
+		subTex: '#555'
 	}
 }
