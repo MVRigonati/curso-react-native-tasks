@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { Text, View, TouchableWithoutFeedback } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import comonStyles from '../commonStyles'
 import 'moment/locale/pt-br'
@@ -50,7 +50,7 @@ export default props => {
 	let check = <View style={styles.pending} />
 	if (props.doneAt !== null) {
 		descStyle.textDecorationLine = 'line-through'
-		
+
 		check = (
 			<View style={styles.done}>
 				<Icon name='check' size={20}
@@ -61,7 +61,9 @@ export default props => {
 
 	return (
 		<View style={styles.container}>
-			<View style={styles.checkContainer}>{check}</View>
+			<TouchableWithoutFeedback onPress={() => props.toggleTask(props.id)}>
+				<View style={styles.checkContainer}>{check}</View>
+			</TouchableWithoutFeedback>
 			<View>
 				<Text style={[styles.description, descStyle]}>
 					{props.desc}
