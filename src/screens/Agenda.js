@@ -3,7 +3,7 @@ import {
 	StyleSheet, Text,
 	View, ImageBackground,
 	FlatList, TouchableOpacity,
-	Platform
+	Platform, AsyncStorage
 } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import ActionButton from 'react-native-action-button'
@@ -52,26 +52,7 @@ const styles = StyleSheet.create({
 
 export default class Agenda extends Component {
 	state = {
-		tasks: [
-			{
-				id: Math.random(),
-				desc: 'Comprar curso',
-				estimateAt: new Date(),
-				doneAt: new Date()
-			},
-			{
-				id: Math.random(),
-				desc: 'Concluir curso',
-				estimateAt: new Date(),
-				doneAt: null
-			},
-			{
-				id: Math.random(),
-				desc: 'Comprar curso',
-				estimateAt: new Date(),
-				doneAt: new Date()
-			},
-		],
+		tasks: [],
 		visibleTasks: [],
 		showDoneTasks: true,
 		showAddTasks: false
@@ -105,6 +86,7 @@ export default class Agenda extends Component {
 		}
 
 		this.setState({ visibleTasks })
+		AsyncStorage.setItem('tasks', JSON.stringify(this.state.tasks))
 	}
 
 	toggleFilter = () => {
@@ -123,8 +105,10 @@ export default class Agenda extends Component {
 		this.setState({ tasks }, this.filterTasks)
 	}
 
-	componentDidMount() {
-		this.filterTasks()
+	async componentDidMount() {
+		const data = await AsyncStorage.getItem('tasks')
+		const tasks = JSON.parse(data) || []
+		this.setState({ tasks }, this.filterTasks())
 	}
 
 	render() {
