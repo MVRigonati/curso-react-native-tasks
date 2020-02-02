@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import {
-	Text, TextInput, Modal, View,
-	DatePickerIOS, StyleSheet, Alert,
-	TouchableWithoutFeedback, TouchableOpacity
+	Text, TextInput, Modal, View, StyleSheet,
+	DatePickerIOS, DatePickerAndroid, Alert,
+	TouchableWithoutFeedback, TouchableOpacity,
 } from 'react-native'
 import commonStyles from '../commonStyles'
 import moment from 'moment'
+import { Platform } from '@unimodules/core';
 
 const styles = StyleSheet.create({
 	container: {
@@ -41,6 +42,13 @@ const styles = StyleSheet.create({
 	buttonsContainer: {
 		flexDirection: 'row',
 		justifyContent: 'flex-end'
+	},
+	date: {
+		fontFamily: commonStyles.fontFamily,
+		fontSize: 20,
+		marginLeft: 10,
+		marginTop: 10,
+		textAlign: 'center'
 	}
 })
 
@@ -63,6 +71,20 @@ export default class AddTask extends Component {
 		}
 	}
 
+	handleDateAndroidChanged = () => {
+		DatePickerAndroid.open({
+			date: this.state.date
+		}).then(e => { // Quando o usuario clica em salvar ou cancelar
+			if (e.action !== DatePickerAndroid.dismissedAction) {
+				const momentDate = moment(this.state.date)
+				momentDate.date(e.day)
+				momentDate.month(e.month)
+				momentDate.year(e.year)
+				this.setState({ date: momentDate.toDate() })
+			}
+		})
+	}
+
 	modalBlanckSpace = () => {
 		return(
 			<TouchableWithoutFeedback onPress={this.props.onCancel}>
@@ -78,6 +100,23 @@ export default class AddTask extends Component {
 			</TouchableOpacity>
 		)
 	}
+	
+	mountDatePicket() {
+		let datePicker = null
+		if (Platform.OS === 'ios') {
+			datePicker = <DatePickerIOS mode='date' date={this.state.date}
+				onDateChange={date => this.setState({ date })} />
+		} else {
+			datePicker = (
+				<TouchableOpacity onPress={this.handleDateAndroidChanged}>
+					<Text style={styles.date}>
+						{moment(this.state.date).format('ddd, D [de] MMMM [de] YYYY')}
+					</Text>
+				</TouchableOpacity>
+			)
+		}
+		return datePicker
+	}
 
 	render() {
 		return(
@@ -92,8 +131,7 @@ export default class AddTask extends Component {
 							style={styles.input}
 							onChangeText={desc => this.setState({ desc })}
 							value={this.state.desc} />
-						<DatePickerIOS mode='date' date={this.state.date}
-							onDateChange={date => this.setState({ date })} />
+							{this.mountDatePicket()}
 						<View style={styles.buttonsContainer}>
 							{this.touchableOpacityButton(this.props.onCancel, 'Cancelar')}
 							{this.touchableOpacityButton(this.save, 'Savar')}

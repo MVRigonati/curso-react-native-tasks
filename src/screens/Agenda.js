@@ -138,7 +138,7 @@ export default class Agenda extends Component {
 					<View style={styles.titleBar}>
 						<Text style={styles.title}>Hoje</Text>
 						<Text style={styles.subtitle}>
-							{moment().locale('pt-br').format('ddd, D [de] MMMM')}
+							{moment().locale('pt-br').format('ddd, D [de] MMMM [de] YYYY')}
 						</Text>
 					</View>
 				</ImageBackground>
