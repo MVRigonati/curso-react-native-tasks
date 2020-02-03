@@ -47,11 +47,6 @@ const styles = StyleSheet.create({
 		color: comonStyles.colors.subTex,
 		fontSize: 12
 	},
-	date: {
-		fontFamily: comonStyles.fontFamily,
-		color: comonStyles.colors.subTex,
-		fontSize: 12
-	},
 	exclude: {
 		flex: 1,
 		backgroundColor: 'red',
@@ -67,7 +62,6 @@ const styles = StyleSheet.create({
 		justifyContent: 'flex-start',
 		paddingLeft: 20
 	},
-	// [ {...this}, {} ],
 	excludeText: {
 		fontFamily: comonStyles.fontFamily,
 		color: comonStyles.colors.secondary,
@@ -89,7 +83,7 @@ export default props => {
 
 	const rightContent = [
 		<TouchableOpacity
-			style={styles.excludeSwipe} // exclude + justifyContent: 'flex-start', paddingLeft: 20
+			style={styles.excludeSwipe}
 			onPress={() => props.onDelete(props.id)}>
 			<Icon name='trash' size={30}
 				color={comonStyles.colors.secondary} />
