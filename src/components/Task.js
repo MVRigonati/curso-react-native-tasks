@@ -5,7 +5,7 @@ import {
 	TouchableOpacity
 } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import Swipeable from 'react-native-swipeable'
+import Swipeable from 'react-native-gesture-handler/Swipeable'
 import comonStyles from '../commonStyles'
 import 'moment/locale/pt-br'
 import moment from 'moment'
@@ -15,7 +15,8 @@ const styles = StyleSheet.create({
 		paddingVertical: 10,
 		flexDirection: 'row',
 		borderBottomWidth: 1,
-		borderColor: '#AAA'
+		borderColor: '#AAA',
+		backgroundColor: '#FFF'
 	},
 	checkContainer: {
 		alignItems: 'center',
@@ -67,28 +68,32 @@ const styles = StyleSheet.create({
 		color: comonStyles.colors.secondary,
 		fontSize: 20,
 		margin: 10
+	},
+	rightSwipe: {
+		backgroundColor: 'red',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'flex-end',
+		paddingHorizontal: 20,
+	},
+	leftSwipe: {
+		backgroundColor: 'red',
+		flexDirection: 'row',
+		alignItems: 'center'
+	},
+	deleteText: {
+		fontFamily: comonStyles.fontFamily,
+		color: '#FFF',
+		fontSize: 20,
+		margin: 10
+	},
+	deleteIcon: {
+		marginLeft: 10
 	}
 })
 
 export default props => {
 	const descStyle = {}
-
-	const leftContent = (
-		<View style={styles.exclude}>
-			<Icon name='trash' size={20}
-				color={comonStyles.colors.secondary} />
-			<Text style={styles.excludeText}>Excluir</Text>
-		</View>
-	)
-
-	const rightContent = [
-		<TouchableOpacity
-			style={styles.excludeSwipe}
-			onPress={() => props.onDelete(props.id)}>
-			<Icon name='trash' size={30}
-				color={comonStyles.colors.secondary} />
-		</TouchableOpacity>
-	]
 
 	let check = <View style={styles.pending} />
 	if (props.doneAt !== null) {
@@ -102,23 +107,42 @@ export default props => {
 		)
 	}
 
-	return (
-		<Swipeable leftActionActivationDistance={200}
-			onLeftActionActivate={() => props.onDelete(props.id)}
-			leftContent={leftContent} rightButtons={rightContent}>
-		<View style={styles.container}>
-			<TouchableWithoutFeedback onPress={() => props.toggleTask(props.id)}>
-				<View style={styles.checkContainer}>{check}</View>
-			</TouchableWithoutFeedback>
-			<View>
-				<Text style={[styles.description, descStyle]}>
-					{props.desc}
-				</Text>
-				<Text style={styles.date}>
-					{moment(props.estimateAt).locale('pt-br').format('ddd, D [de] MMMM [de] YYYY')}
-				</Text>
+	const getRightActions = () => {
+		return (
+			<TouchableOpacity style={styles.rightSwipe}
+				onPress={() => props.onDelete(props.id)}>
+				<Icon name='trash' size={30} color='#FFF' />
+			</TouchableOpacity>
+		)
+	}
+
+	const getLeftActions = () => {
+		return (
+			<View style={styles.leftSwipe}>
+				<Icon name='trash' style={styles.deleteIcon}
+					size={20} color='#FFF' />
+				<Text style={styles.deleteText}>Excluir</Text>
 			</View>
-		</View>
+		)
+	}
+
+	return (
+		<Swipeable renderRightActions={getRightActions}
+			renderLeftActions={getLeftActions}
+			onSwipeableLeftOpen={() => props.onDelete(props.id)}>
+			<View style={styles.container}>
+				<TouchableWithoutFeedback onPress={() => props.toggleTask(props.id)}>
+					<View style={styles.checkContainer}>{check}</View>
+				</TouchableWithoutFeedback>
+				<View>
+					<Text style={[styles.description, descStyle]}>
+						{props.desc}
+					</Text>
+					<Text style={styles.date}>
+						{moment(props.estimateAt).locale('pt-br').format('ddd, D [de] MMMM [de] YYYY')}
+					</Text>
+				</View>
+			</View>
 		</Swipeable>
 	)
 }
