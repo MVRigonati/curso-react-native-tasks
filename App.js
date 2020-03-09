@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { loadCustomFont } from './src/commonStyles'
-import Agenda from './src/screens/Agenda'
+import Auth from './src/screens/Auth'
 
 export default class App extends Component {
 	componentDidMount() {
@@ -8,8 +8,6 @@ export default class App extends Component {
 	}
 
 	render() {
-		return (
-			<Agenda />
-		)
+		return <Auth />
 	}
 }

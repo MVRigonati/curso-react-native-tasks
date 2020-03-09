@@ -8,6 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@types/react-native": "^0.61.20",
     "expo": "~36.0.0",
     "moment": "^2.24.0",
     "react": "~16.9.0",
