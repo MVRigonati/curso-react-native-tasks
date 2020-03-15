@@ -1,6 +1,6 @@
 import * as Font from 'expo-font'
 import React, { Component } from 'react'
-import Auth from './src/screens/Auth'
+import Navigator from './src/Navigator'
 import { AppLoading } from 'expo'
 
 export default class App extends Component {
@@ -29,7 +29,7 @@ export default class App extends Component {
 		if (this.state.showLoadingScreen) {
 			resultPage = this.loadingScreen()
 		} else {
-			resultPage = <Auth />
+			resultPage = <Navigator />
 		}
 		return resultPage
 	}
