@@ -4,12 +4,12 @@ import {
 	Text,
 	StyleSheet,
 	View,
-	TextInput,
 	TouchableOpacity
 } from 'react-native'
 
 import backgroundImage from '../../assets/imgs/login.jpg'
 import commonStyles from '../commonStyles'
+import AuthInput from '../components/AuthInput'
 
 const styles = StyleSheet.create({
 	background: {
@@ -38,14 +38,14 @@ const styles = StyleSheet.create({
 	},
 	input: {
 		marginTop: 10,
-		backgroundColor: '#FFF',
-		padding: 15
+		backgroundColor: '#FFF'
 	},
 	button: {
 		backgroundColor: '#080',
 		marginTop: 10,
 		padding: 10,
-		alignItems: 'center'
+		alignItems: 'center',
+		borderRadius: 7
 	},
 	buttonText: {
 		fontFamily: commonStyles.fontFamily,
@@ -76,15 +76,18 @@ export default class Auth extends Component {
 		let showConfirmPasswordInput
 		if (this.state.stageNew) {
 			showNameInput = (
-				<TextInput
+				<AuthInput
+					icon="user"
 					placeholder="Nome"
+					autoCapitalize="words"
 					value={this.state.name}
 					style={styles.input}
 					onChangeText={name => this.setState({ name })}
 				/>
 			)
 			showConfirmPasswordInput = (
-				<TextInput
+				<AuthInput
+					icon="lock"
 					placeholder="Confirme sua senha"
 					secureTextEntry={true}
 					value={this.state.confirmPassword}
@@ -106,13 +109,17 @@ export default class Auth extends Component {
 							: 'Informe seus dados'}
 					</Text>
 					{showNameInput}
-					<TextInput
+					<AuthInput
+						icon="at"
 						placeholder="E-mail"
+						autoCapitalize="none"
+						keyboardType="email-address"
 						value={this.state.email}
 						style={styles.input}
 						onChangeText={email => this.setState({ email })}
 					/>
-					<TextInput
+					<AuthInput
+						icon="lock"
 						placeholder="Senha"
 						secureTextEntry={true}
 						value={this.state.password}
