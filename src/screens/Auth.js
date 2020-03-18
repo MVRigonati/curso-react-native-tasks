@@ -1,15 +1,12 @@
 import React, { Component } from 'react'
-import {
-	ImageBackground,
-	Text,
-	StyleSheet,
-	View,
-	TouchableOpacity
-} from 'react-native'
+import axios from 'axios'
+import { ImageBackground, Text, StyleSheet, View, TouchableOpacity } from 'react-native'
 
 import backgroundImage from '../../assets/imgs/login.jpg'
 import commonStyles from '../commonStyles'
 import AuthInput from '../components/AuthInput'
+
+import { server, showError, showSuccess } from '../common'
 
 const styles = StyleSheet.create({
 	background: {
@@ -54,61 +51,58 @@ const styles = StyleSheet.create({
 	}
 })
 
+const initialState = {
+	name: '',
+	email: '',
+	password: '',
+	confirmPassword: '',
+	stageNew: false
+}
+
 export default class Auth extends Component {
-	state = {
-		name: '',
-		email: '',
-		password: '',
-		confirmPassword: '',
-		stageNew: false
+	state = { ...initialState }
+
+	singin = () => {
+		console.log('Logar user')
 	}
 
-	singinSignup = () => {
-		if (this.state.stageNew) {
-			// Registrar user
-		} else {
-			// Logar user
+	signup = async () => {
+		try {
+			await axios.post(server.concat('/signup'), { ...this.state })
+
+			showSuccess('Usuário Cadastrado!')
+			this.setState({ ...initialState })
+		} catch (err) {
+			showError(err)
 		}
 	}
 
 	render() {
-		let showNameInput
-		let showConfirmPasswordInput
-		if (this.state.stageNew) {
-			showNameInput = (
-				<AuthInput
-					icon="user"
-					placeholder="Nome"
-					autoCapitalize="words"
-					value={this.state.name}
-					style={styles.input}
-					onChangeText={name => this.setState({ name })}
-				/>
-			)
-			showConfirmPasswordInput = (
-				<AuthInput
-					icon="lock"
-					placeholder="Confirme sua senha"
-					secureTextEntry={true}
-					value={this.state.confirmPassword}
-					style={styles.input}
-					onChangeText={confirmPassword =>
-						this.setState({ confirmPassword })
-					}
-				/>
-			)
+		let mainButtonOnPress = this.signup
+		let mainButtonText = 'Registrar'
+		let displayStageNewComponent = {}
+		let changeStageText = 'Já possui conta?'
+
+		if (!this.state.stageNew) {
+			mainButtonOnPress = this.singin
+			mainButtonText = 'Entrar'
+			changeStageText = 'Ainda não possui conta?'
+			displayStageNewComponent = { display: 'none' }
 		}
 
 		return (
 			<ImageBackground source={backgroundImage} style={styles.background}>
 				<Text style={styles.title}>Tasks</Text>
 				<View style={styles.formContainer}>
-					<Text style={styles.subtitle}>
-						{this.state.stageNew
-							? 'Crie sua conta'
-							: 'Informe seus dados'}
-					</Text>
-					{showNameInput}
+					<Text style={styles.subtitle}>{this.state.stageNew ? 'Crie sua conta' : 'Informe seus dados'}</Text>
+					<AuthInput
+						icon="user"
+						placeholder="Nome"
+						autoCapitalize="words"
+						value={this.state.name}
+						style={[styles.input, displayStageNewComponent]}
+						onChangeText={name => this.setState({ name })}
+					/>
 					<AuthInput
 						icon="at"
 						placeholder="E-mail"
@@ -126,25 +120,24 @@ export default class Auth extends Component {
 						style={styles.input}
 						onChangeText={password => this.setState({ password })}
 					/>
-					{showConfirmPasswordInput}
-					<TouchableOpacity onPress={this.singinSignup}>
+					<AuthInput
+						icon="lock"
+						placeholder="Confirme sua senha"
+						secureTextEntry={true}
+						value={this.state.confirmPassword}
+						style={[styles.input, displayStageNewComponent]}
+						onChangeText={confirmPassword => this.setState({ confirmPassword })}
+					/>
+					<TouchableOpacity onPress={mainButtonOnPress}>
 						<View style={styles.button}>
-							<Text style={styles.buttonText}>
-								{this.state.stageNew ? 'Registrar' : 'Entrar'}
-							</Text>
+							<Text style={styles.buttonText}>{mainButtonText}</Text>
 						</View>
 					</TouchableOpacity>
 				</View>
 				<TouchableOpacity
 					style={{ padding: 10 }}
-					onPress={() =>
-						this.setState({ stageNew: !this.state.stageNew })
-					}>
-					<Text style={styles.buttonText}>
-						{this.state.stageNew
-							? 'Já possui conta?'
-							: 'Ainda não possui conta?'}
-					</Text>
+					onPress={() => this.setState({ stageNew: !this.state.stageNew })}>
+					<Text style={styles.buttonText}>{changeStageText}</Text>
 				</TouchableOpacity>
 			</ImageBackground>
 		)
