@@ -12,11 +12,12 @@ const styles = StyleSheet.create({
 		alignItems: 'center'
 	},
 	icon: {
+		flex: 1,
 		color: '#333',
-		marginLeft: 20
+		paddingLeft: 15
 	},
 	input: {
-		marginLeft: 20,
+		flex: 7,
 		width: '70%'
 	}
 })

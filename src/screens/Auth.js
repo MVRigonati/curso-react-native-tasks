@@ -15,11 +15,14 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center'
 	},
+	containerTitle: {
+		flex: 1,
+		justifyContent: 'center'
+	},
 	title: {
 		fontFamily: commonStyles.fontFamily,
 		color: commonStyles.colors.secondary,
-		fontSize: 70,
-		marginBottom: 10
+		fontSize: 70
 	},
 	subtitle: {
 		fontFamily: commonStyles.fontFamily,
@@ -27,6 +30,9 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		textAlign: 'center',
 		marginBottom: 10
+	},
+	container: {
+		flex: 1
 	},
 	formContainer: {
 		backgroundColor: 'rgba(0, 0, 0, 0.8)',
@@ -48,6 +54,14 @@ const styles = StyleSheet.create({
 		fontFamily: commonStyles.fontFamily,
 		color: '#FFF',
 		fontSize: 20
+	},
+	containerChangeStageButton: {
+		flex: 1,
+		justifyContent: 'flex-end'
+	},
+	changeStageButton: {
+		padding: 10,
+		marginBottom: 50
 	}
 })
 
@@ -79,66 +93,74 @@ export default class Auth extends Component {
 
 	render() {
 		let mainButtonOnPress = this.signup
-		let mainButtonText = 'Registrar'
 		let displayStageNewComponent = {}
+		let mainButtonText = 'Registrar'
+		let subtitleText = 'Crie sua conta'
 		let changeStageText = 'Já possui conta?'
 
 		if (!this.state.stageNew) {
 			mainButtonOnPress = this.singin
 			mainButtonText = 'Entrar'
+			subtitleText = 'Informe seus dados'
 			changeStageText = 'Ainda não possui conta?'
 			displayStageNewComponent = { display: 'none' }
 		}
 
 		return (
 			<ImageBackground source={backgroundImage} style={styles.background}>
-				<Text style={styles.title}>Tasks</Text>
-				<View style={styles.formContainer}>
-					<Text style={styles.subtitle}>{this.state.stageNew ? 'Crie sua conta' : 'Informe seus dados'}</Text>
-					<AuthInput
-						icon="user"
-						placeholder="Nome"
-						autoCapitalize="words"
-						value={this.state.name}
-						style={[styles.input, displayStageNewComponent]}
-						onChangeText={name => this.setState({ name })}
-					/>
-					<AuthInput
-						icon="at"
-						placeholder="E-mail"
-						autoCapitalize="none"
-						keyboardType="email-address"
-						value={this.state.email}
-						style={styles.input}
-						onChangeText={email => this.setState({ email })}
-					/>
-					<AuthInput
-						icon="lock"
-						placeholder="Senha"
-						secureTextEntry={true}
-						value={this.state.password}
-						style={styles.input}
-						onChangeText={password => this.setState({ password })}
-					/>
-					<AuthInput
-						icon="lock"
-						placeholder="Confirme sua senha"
-						secureTextEntry={true}
-						value={this.state.confirmPassword}
-						style={[styles.input, displayStageNewComponent]}
-						onChangeText={confirmPassword => this.setState({ confirmPassword })}
-					/>
-					<TouchableOpacity onPress={mainButtonOnPress}>
-						<View style={styles.button}>
-							<Text style={styles.buttonText}>{mainButtonText}</Text>
-						</View>
+				<View style={styles.containerTitle}>
+					<Text style={styles.title}>Tasks</Text>
+				</View>
+				<View style={styles.container}>
+					<View style={styles.formContainer}>
+						<Text style={styles.subtitle}>{subtitleText}</Text>
+						<AuthInput
+							icon="user"
+							placeholder="Nome"
+							autoCapitalize="words"
+							value={this.state.name}
+							style={[styles.input, displayStageNewComponent]}
+							onChangeText={name => this.setState({ name })}
+						/>
+						<AuthInput
+							icon="at"
+							placeholder="E-mail"
+							autoCapitalize="none"
+							keyboardType="email-address"
+							value={this.state.email}
+							style={styles.input}
+							onChangeText={email => this.setState({ email })}
+						/>
+						<AuthInput
+							icon="lock"
+							placeholder="Senha"
+							secureTextEntry={true}
+							value={this.state.password}
+							style={styles.input}
+							onChangeText={password => this.setState({ password })}
+						/>
+						<AuthInput
+							icon="lock"
+							placeholder="Confirme sua senha"
+							secureTextEntry={true}
+							value={this.state.confirmPassword}
+							style={[styles.input, displayStageNewComponent]}
+							onChangeText={confirmPassword => this.setState({ confirmPassword })}
+						/>
+						<TouchableOpacity onPress={mainButtonOnPress}>
+							<View style={styles.button}>
+								<Text style={styles.buttonText}>{mainButtonText}</Text>
+							</View>
+						</TouchableOpacity>
+					</View>
+				</View>
+				<View style={styles.containerChangeStageButton}>
+					<TouchableOpacity
+						style={styles.changeStageButton}
+						onPress={() => this.setState({ stageNew: !this.state.stageNew })}>
+						<Text style={styles.buttonText}>{changeStageText}</Text>
 					</TouchableOpacity>
 				</View>
-				<TouchableOpacity
-					style={{ padding: 10 }}
-					onPress={() => this.setState({ stageNew: !this.state.stageNew })}>
-					<Text style={styles.buttonText}>{changeStageText}</Text>
-				</TouchableOpacity>
 			</ImageBackground>
 		)
 	}
