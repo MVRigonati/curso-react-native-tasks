@@ -5,6 +5,7 @@ import { ImageBackground, Text, StyleSheet, View, TouchableOpacity } from 'react
 import backgroundImage from '../../assets/imgs/login.jpg'
 import commonStyles from '../commonStyles'
 import AuthInput from '../components/AuthInput'
+import { screenRoutes } from '../common'
 
 import { server, showError, showSuccess } from '../common'
 
@@ -76,8 +77,19 @@ const initialState = {
 export default class Auth extends Component {
 	state = { ...initialState }
 
-	singin = () => {
-		console.log('Logar user')
+	adicionaTokenAoHeader(token, axios) {
+		axios.defaults.headers.common['Authorization'] = `bearer ${token}`
+	}
+
+	singin = async () => {
+		try {
+			const res = await axios.post(server.concat('/signin'), { ...this.state })
+
+			this.adicionaTokenAoHeader(res.data.token, axios)
+			this.props.navigation.navigate(screenRoutes.home)
+		} catch (err) {
+			showError(err)
+		}
 	}
 
 	signup = async () => {
