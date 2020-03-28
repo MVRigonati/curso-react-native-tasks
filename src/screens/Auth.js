@@ -103,6 +103,16 @@ export default class Auth extends Component {
 		}
 	}
 
+	isFormValuesValid = () => {
+		let isFormValuesValid = this.state.email && this.state.email.includes('@')
+		isFormValuesValid = isFormValuesValid && this.state.password && this.state.password.length > 5
+		if (this.state.stageNew) {
+			isFormValuesValid = isFormValuesValid && this.state.name && this.state.name.trim().length > 2
+			isFormValuesValid = isFormValuesValid && this.state.confirmPassword === this.state.password
+		}
+		return isFormValuesValid
+	}
+
 	render() {
 		let mainButtonOnPress = this.signup
 		let displayStageNewComponent = {}
@@ -116,6 +126,11 @@ export default class Auth extends Component {
 			subtitleText = 'Informe seus dados'
 			changeStageText = 'Ainda não possui conta?'
 			displayStageNewComponent = { display: 'none' }
+		}
+
+		let disableMainButton = null
+		if (!this.isFormValuesValid()) {
+			disableMainButton = { backgroundColor: '#AAA' }
 		}
 
 		return (
@@ -159,8 +174,8 @@ export default class Auth extends Component {
 							style={[styles.input, displayStageNewComponent]}
 							onChangeText={confirmPassword => this.setState({ confirmPassword })}
 						/>
-						<TouchableOpacity onPress={mainButtonOnPress}>
-							<View style={styles.button}>
+						<TouchableOpacity onPress={mainButtonOnPress} disabled={disableMainButton != null}>
+							<View style={[styles.button, disableMainButton]}>
 								<Text style={styles.buttonText}>{mainButtonText}</Text>
 							</View>
 						</TouchableOpacity>
