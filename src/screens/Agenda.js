@@ -65,6 +65,14 @@ export default class Agenda extends Component {
 		showAddTasks: false
 	}
 
+	constructor() {
+		super()
+		AsyncStorage.getItem('tasks', (_, result) => {
+			const savedStates = JSON.parse(result) || []
+			this.setState({ showDoneTasks: savedStates.showDoneTasks }, this.filterTasks())
+		})
+	}
+
 	addTask = task => {
 		const tasks = [...this.state.tasks]
 		tasks.push({
@@ -93,16 +101,16 @@ export default class Agenda extends Component {
 		}
 
 		this.setState({ visibleTasks })
+	}
+
+	toggleFilter = () => {
+		this.setState({ showDoneTasks: !this.state.showDoneTasks }, this.filterTasks)
 		AsyncStorage.setItem(
 			'tasks',
 			JSON.stringify({
 				showDoneTasks: this.state.showDoneTasks
 			})
 		)
-	}
-
-	toggleFilter = () => {
-		this.setState({ showDoneTasks: !this.state.showDoneTasks }, this.filterTasks)
 	}
 
 	toggleTask = taskId => {
@@ -114,12 +122,6 @@ export default class Agenda extends Component {
 		})
 
 		this.setState({ tasks }, this.filterTasks)
-	}
-
-	async componentDidMount() {
-		const data = await AsyncStorage.getItem('tasks')
-		const savedStates = JSON.parse(data) || []
-		this.setState({ showDoneTasks: savedStates.showDoneTasks }, this.filterTasks())
 	}
 
 	loadTasks = async () => {
