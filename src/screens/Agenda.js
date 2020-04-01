@@ -73,22 +73,26 @@ export default class Agenda extends Component {
 		})
 	}
 
-	addTask = task => {
-		const tasks = [...this.state.tasks]
-		tasks.push({
-			id: Math.random(),
-			desc: task.desc,
-			estimateAt: task.date,
-			doneAt: null
-		})
+	addTask = async task => {
+		try {
+			await axios.post(`${server}/tasks`, {
+				desc: task.desc,
+				estimateAt: task.date
+			})
 
-		this.setState({ tasks, showAddTasks: false }, this.filterTasks)
+			this.setState({ showAddTasks: false }, this.loadTasks)
+		} catch (ex) {
+			showError(ex)
+		}
 	}
 
-	deleteTask = idToRemove => {
-		// Utilizando filter() para remover um elemento
-		const tasks = this.state.tasks.filter(task => task.id !== idToRemove)
-		this.setState({ tasks }, this.filterTasks)
+	deleteTask = async idToRemove => {
+		try {
+			await axios.delete(`${server}/tasks/${idToRemove}`)
+			this.loadTasks()
+		} catch (ex) {
+			showError(ex)
+		}
 	}
 
 	filterTasks = () => {
@@ -113,15 +117,13 @@ export default class Agenda extends Component {
 		)
 	}
 
-	toggleTask = taskId => {
-		const tasks = [...this.state.tasks]
-		tasks.forEach(task => {
-			if (task.id === taskId) {
-				task.doneAt = task.doneAt != null ? null : new Date()
-			}
-		})
-
-		this.setState({ tasks }, this.filterTasks)
+	toggleTask = async taskId => {
+		try {
+			await axios.put(`${server}/tasks/${taskId}/toggle`)
+			this.loadTasks()
+		} catch (ex) {
+			showError(ex)
+		}
 	}
 
 	loadTasks = async () => {
