@@ -69,7 +69,7 @@ export default class Agenda extends Component {
 		super()
 		AsyncStorage.getItem('tasks', (_, result) => {
 			const savedStates = JSON.parse(result) || []
-			this.setState({ showDoneTasks: savedStates.showDoneTasks }, this.filterTasks())
+			this.setState({ showDoneTasks: savedStates.showDoneTasks }, this.loadTasks)
 		})
 	}
 
@@ -128,7 +128,7 @@ export default class Agenda extends Component {
 		try {
 			const maxDate = moment().format('YYYY-MM-DD 23:59:59')
 			const res = await axios.get(`${server}/tasks?date=${maxDate}`)
-			this.setState({ tasks: res.data }, this.filterTasks())
+			this.setState({ tasks: res.data }, this.filterTasks)
 		} catch (ex) {
 			showError(ex)
 		}
