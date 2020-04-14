@@ -16,7 +16,6 @@ import moment from 'moment'
 import 'moment/locale/pt-br'
 
 import { server, showError } from '../common'
-import todayImage from '../../assets/imgs/today.jpg'
 import commonStyles from '../commonStyles'
 import Task from '../components/Task'
 import AddTask from './AddTasks'
@@ -51,9 +50,10 @@ const styles = StyleSheet.create({
 	},
 	iconBar: {
 		marginTop: Platform.OS == 'ios' ? 30 : 20,
+		marginTop: 40,
 		marginHorizontal: 20,
 		flexDirection: 'row',
-		justifyContent: 'flex-end'
+		justifyContent: 'space-between'
 	}
 })
 
@@ -128,7 +128,7 @@ export default class Agenda extends Component {
 
 	loadTasks = async () => {
 		try {
-			const maxDate = moment().format('YYYY-MM-DD 23:59:59')
+			const maxDate = moment().add({ days: this.props.daysAhead }).format('YYYY-MM-DD 23:59:59')
 			const res = await axios.get(`${server}/tasks?date=${maxDate}`)
 			this.setState({ tasks: res.data }, this.filterTasks)
 		} catch (ex) {
@@ -144,8 +144,11 @@ export default class Agenda extends Component {
 					onSave={this.addTask}
 					onCancel={() => this.setState({ showAddTasks: false })}
 				/>
-				<ImageBackground source={todayImage} style={styles.background}>
+				<ImageBackground source={this.props.backgroundImage} style={styles.background}>
 					<View style={styles.iconBar}>
+						<TouchableOpacity onPress={this.props.navigation.openDrawer}>
+							<Icon name="bars" size={20} color={commonStyles.colors.secondary} />
+						</TouchableOpacity>
 						<TouchableOpacity onPress={this.toggleFilter}>
 							<Icon
 								name={this.state.showDoneTasks ? 'eye' : 'eye-slash'}
@@ -155,11 +158,9 @@ export default class Agenda extends Component {
 						</TouchableOpacity>
 					</View>
 					<View style={styles.titleBar}>
-						<Text style={styles.title}>Hoje</Text>
+						<Text style={styles.title}>{this.props.title}</Text>
 						<Text style={styles.subtitle}>
-							{moment()
-								.locale('pt-br')
-								.format('ddd, D [de] MMMM [de] YYYY')}
+							{moment().locale('pt-br').format('ddd, D [de] MMMM [de] YYYY')}
 						</Text>
 					</View>
 				</ImageBackground>
@@ -173,7 +174,7 @@ export default class Agenda extends Component {
 					/>
 				</View>
 				<ActionButton
-					buttonColor={commonStyles.colors.today}
+					buttonColor={this.props.color}
 					onPress={() => this.setState({ showAddTasks: true })}
 				/>
 			</View>
