@@ -6,11 +6,28 @@ import { screenRoutes } from './common'
 import commonStyles from './commonStyles'
 import Auth from './screens/Auth'
 import TaskList from './screens/Agenda'
+import Menu from './components/Menu'
 
 import todayImage from '../assets/imgs/today.jpg'
 import tomorrowImage from '../assets/imgs/tomorrow.jpg'
 import weekImage from '../assets/imgs/week.jpg'
 import monthImage from '../assets/imgs/month.jpg'
+
+const menuConfig = {
+	initialRouteName: 'Today',
+	contentComponent: Menu,
+	contentOptions: {
+		labelStyle: {
+			fontFamily: commonStyles.fontFamily,
+			fontWeight: 'normal',
+			fontSize: 20
+		},
+		activeLabelStyle: {
+			color: '#080',
+			fontWeight: 'bold'
+		}
+	}
+}
 
 const sideMenuRoutes = {
 	Today: {
@@ -75,7 +92,7 @@ const sideMenuRoutes = {
 	}
 }
 
-const sideMenuNavigator = createDrawerNavigator(sideMenuRoutes)
+const sideMenuNavigator = createDrawerNavigator(sideMenuRoutes, menuConfig)
 
 const MainRoutes = {
 	auth: {
