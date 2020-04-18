@@ -1,61 +1,15 @@
 import React, { Component } from 'react'
-import {
-	StyleSheet,
-	Text,
-	View,
-	ImageBackground,
-	FlatList,
-	TouchableOpacity,
-	Platform,
-	AsyncStorage
-} from 'react-native'
+import { Text, View, ImageBackground, FlatList, TouchableOpacity, AsyncStorage } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import ActionButton from 'react-native-action-button'
 import axios from 'axios'
 import moment from 'moment'
 import 'moment/locale/pt-br'
 
-import { server, showError } from '../common'
-import commonStyles from '../commonStyles'
-import Task from '../components/Task'
-import AddTask from './AddTasks'
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1
-	},
-	background: {
-		flex: 3
-	},
-	titleBar: {
-		flex: 1,
-		justifyContent: 'flex-end'
-	},
-	title: {
-		fontFamily: commonStyles.fontFamily,
-		color: commonStyles.colors.secondary,
-		fontSize: 50,
-		marginLeft: 20,
-		marginBottom: 10
-	},
-	subtitle: {
-		fontFamily: commonStyles.fontFamily,
-		color: commonStyles.colors.secondary,
-		fontSize: 20,
-		marginLeft: 20,
-		marginBottom: 30
-	},
-	taskContainer: {
-		flex: 7
-	},
-	iconBar: {
-		marginTop: Platform.OS == 'ios' ? 30 : 20,
-		marginTop: 40,
-		marginHorizontal: 20,
-		flexDirection: 'row',
-		justifyContent: 'space-between'
-	}
-})
+import { server, showError } from '../../common'
+import Task from '../../components/Task'
+import AddTask from '../AddTasks'
+import styles from './styles'
 
 export default class Agenda extends Component {
 	state = {
@@ -146,14 +100,16 @@ export default class Agenda extends Component {
 				/>
 				<ImageBackground source={this.props.backgroundImage} style={styles.background}>
 					<View style={styles.iconBar}>
-						<TouchableOpacity onPress={this.props.navigation.openDrawer}>
-							<Icon name="bars" size={20} color={commonStyles.colors.secondary} />
+						<TouchableOpacity
+							onPress={this.props.navigation.openDrawer}
+							style={styles.iconBarTouchableButtons}>
+							<Icon name="bars" size={20} color={styles.iconColor} />
 						</TouchableOpacity>
-						<TouchableOpacity onPress={this.toggleFilter}>
+						<TouchableOpacity onPress={this.toggleFilter} style={styles.iconBarTouchableButtons}>
 							<Icon
 								name={this.state.showDoneTasks ? 'eye' : 'eye-slash'}
 								size={20}
-								color={commonStyles.colors.secondary}
+								color={styles.iconColor}
 							/>
 						</TouchableOpacity>
 					</View>
