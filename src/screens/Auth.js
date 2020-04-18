@@ -86,7 +86,7 @@ export default class Auth extends Component {
 			const res = await axios.post(server.concat('/signin'), { ...this.state })
 
 			this.adicionaTokenAoHeader(res.data.token, axios)
-			this.props.navigation.navigate(screenRoutes.home)
+			this.props.navigation.navigate(screenRoutes.home, res.data)
 		} catch (err) {
 			showError(err)
 		}
