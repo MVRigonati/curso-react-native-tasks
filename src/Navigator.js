@@ -7,6 +7,7 @@ import commonStyles from './commonStyles'
 import Auth from './screens/Auth'
 import TaskList from './screens/Agenda'
 import Menu from './components/Menu'
+import InitActions from './screens/InitActions'
 
 import todayImage from '../assets/imgs/today.jpg'
 import tomorrowImage from '../assets/imgs/tomorrow.jpg'
@@ -95,6 +96,10 @@ const sideMenuRoutes = {
 const sideMenuNavigator = createDrawerNavigator(sideMenuRoutes, menuConfig)
 
 const MainRoutes = {
+	init: {
+		name: screenRoutes.initActions,
+		screen: InitActions
+	},
 	auth: {
 		name: screenRoutes.auth,
 		screen: Auth
@@ -106,7 +111,7 @@ const MainRoutes = {
 }
 
 const MainNavigator = createSwitchNavigator(MainRoutes, {
-	initialRouteName: screenRoutes.auth
+	initialRouteName: screenRoutes.initActions
 })
 
 export default createAppContainer(MainNavigator)

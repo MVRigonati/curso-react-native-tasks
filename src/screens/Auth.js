@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import { ImageBackground, Text, StyleSheet, View, TouchableOpacity } from 'react-native'
+import { ImageBackground, Text, StyleSheet, View, TouchableOpacity, AsyncStorage } from 'react-native'
 
 import backgroundImage from '../../assets/imgs/login.jpg'
 import commonStyles from '../commonStyles'
 import AuthInput from '../components/AuthInput'
-import { screenRoutes } from '../common'
 
-import { server, showError, showSuccess } from '../common'
+import { server, showError, showSuccess, screenRoutes } from '../common'
 
 const styles = StyleSheet.create({
 	background: {
@@ -84,6 +83,8 @@ export default class Auth extends Component {
 	singin = async () => {
 		try {
 			const res = await axios.post(server.concat('/signin'), { ...this.state })
+
+			AsyncStorage.setItem('userData', JSON.stringify(res.data))
 
 			this.adicionaTokenAoHeader(res.data.token, axios)
 			this.props.navigation.navigate(screenRoutes.home, res.data)

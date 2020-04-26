@@ -4,7 +4,8 @@ const server = 'http://192.168.0.52:3000'
 
 const screenRoutes = {
 	auth: 'auth',
-	home: 'home'
+	home: 'home',
+	initActions: 'init'
 }
 
 function showError(err) {
