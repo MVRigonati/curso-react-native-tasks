@@ -33,6 +33,9 @@ const styles = StyleSheet.create({
 		color: commonStyles.colors.subTex,
 		fontSize: 15,
 		marginBottom: 10
+	},
+	logout: {
+		marginBottom: 10
 	}
 })
 
