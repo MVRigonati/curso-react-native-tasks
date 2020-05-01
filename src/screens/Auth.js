@@ -89,8 +89,13 @@ export default class Auth extends Component {
 			this.adicionaTokenAoHeader(res.data.token, axios)
 			this.props.navigation.navigate(screenRoutes.home, res.data)
 		} catch (err) {
+			const errNum = Number.parseInt(err.response.status)
+			if (errNum < 500 && errNum >= 400) {
+				showError(err.response.data)
+			} else {
 			showError(err)
 		}
+	}
 	}
 
 	signup = async () => {
